@@ -84,6 +84,8 @@ void loop() {
 }
 
 ```
+
+
 ## 1. I/O Helpers
 
 | ฟังก์ชัน             | คำอธิบาย                                                       | ตัวอย่างการใช้                        |
@@ -154,3 +156,101 @@ void loop() {
 | 8       | `u8g2_font_5x7_tf`            | Very small, fixed width       | ฟอนต์ขนาดเล็กมาก เหมาะกับข้อมูลที่ต้องการความกระชับ          |
 | 9       | `u8g2_font_squeezed_b7_tnf`   | แคบ, ตัวเล็ก                  | ฟอนต์เล็กและแคบ เหมาะกับข้อความบีบอัดบนหน้าจอ                |
 | 10      | `u8g2_font_unifont_t_symbols` | ฟอนต์สัญลักษณ์ Unicode        | ฟอนต์สำหรับแสดงสัญลักษณ์, อักขระพิเศษ Unicode                |
+
+
+## โค้คทดสอบ
+
+มันมีไม่หมดหรอ ให้ไปอ่านในไฟล์ "Read.text"
+```bash
+#include <ArduinoUOS.h>
+
+// ตัวอย่างการทดสอบ ArduinoUOS Library
+
+void setup() {
+  // เริ่ม Serial ที่ 115200 baud
+  p.b(115200);
+  delay(1000);
+  p.text("ArduinoUOS Test Begin\n");
+
+  // --- 1. I/O Helpers ---
+  p.text("Testing I/O Helpers...\n");
+  setPinMode(13, 1);       // ตั้งพิน 13 เป็น OUTPUT
+  outD(13, HIGH);          // พิน 13 = HIGH (เปิด LED)
+  delay(500);
+  outD(13, LOW);           // ปิด LED
+  delay(500);
+
+  int btnPressed = btn(2); // อ่านปุ่ม pin 2 (active low)
+  p.text("Button on pin 2 pressed? ");
+  p.text(btnPressed ? "YES\n" : "NO\n");
+
+  int analogVal = ARead(0); // อ่านค่า analog pin 0
+  p.text("Analog read ch0 = ");
+  p.text(String(analogVal).c_str());
+  p.text("\n");
+
+  unsigned long ms = gml(); // ค่า millis()
+  unsigned long us = gmc(); // ค่า micros()
+  p.text("Millis: ");
+  p.text(String(ms).c_str());
+  p.text(" Micros: ");
+  p.text(String(us).c_str());
+  p.text("\n");
+
+  // --- 2. EEPROM Helpers ---
+  p.text("Testing EEPROM Helpers...\n");
+  E.clear();             // ฟอร์แมต EEPROM ก่อน
+  E.W("testVal", 1234);  // เก็บค่า 1234 ในชื่อ testVal
+  int eepromVal = E.R("testVal");
+  p.text("EEPROM read testVal = ");
+  p.text(String(eepromVal).c_str());
+  p.text("\n");
+
+  // --- 3. Watchdog ---
+  p.text("Testing Watchdog...\n");
+  wdOn(); // เปิด watchdog 1 วินาที
+  p.text("Watchdog started.\n");
+
+  // --- 4. Pin-Mode Abstraction (เหมือน I/O) ---
+  setPinMode(12, 1);    // ตั้ง pin 12 เป็น OUTPUT
+  outD(12, HIGH);
+  delay(200);
+  outD(12, LOW);
+
+  // --- 5. Serial I/O Helpers ---
+  p.text("Testing Serial Input...\n");
+  p.text("Type something and press Enter:\n");
+  char* userInput = sIn("> "); // รอรับข้อความจาก Serial
+  p.text("You typed: ");
+  p.text(userInput);
+  p.text("\n");
+
+  // --- 6. List Management ---
+  p.text("Testing List Management...\n");
+  pClr();
+  pAdd("First message");
+  pAdd("Second message");
+  sClr();
+  sAdd("Auxiliary 1");
+  sAdd("Auxiliary 2");
+  p.text("Lists updated.\n");
+
+  // --- 7. My_print class ---
+  if(p()) {
+    p.text("Serial is ready for printing!\n");
+  }
+
+  // --- 8. OLED Fonts (แสดงแค่ชื่อฟอนต์ตัวอย่าง) ---
+  p.text("OLED fonts available:\n");
+  p.text("1) u8g2_font_ncenB08_tr\n");
+  p.text("2) u8g2_font_6x10_tf\n");
+  p.text("... (ดูรายละเอียดในเอกสาร)\n");
+}
+
+void loop() {
+  wdR(); // รีเซ็ต watchdog เพื่อป้องกันรีเซ็ตเครื่อง
+
+  delay(1000);  // เว้น 1 วินาทีระหว่างวนลูป
+}
+
+```
