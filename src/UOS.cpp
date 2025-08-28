@@ -112,6 +112,30 @@ void My_print::oled(int X, int Y, float num) {
   oled(num);
 }
 
+void My_print::oled(int X, int Y, const char* s, int t) {
+  u8g2->setDrawColor(t);
+  set(X, Y);
+  oled(s);
+}
+
+void My_print::oled(int X, int Y, int num, int t) {
+  u8g2->setDrawColor(t);
+  set(X, Y);
+  oled(num);
+}
+
+void My_print::oled(int X, int Y, long num, int t) {
+  u8g2->setDrawColor(t);
+  set(X, Y);
+  oled(num);
+}
+
+void My_print::oled(int X, int Y, float num, int t) {
+  u8g2->setDrawColor(t);
+  set(X, Y);
+  oled(num);
+}
+
 void My_print::clear() {
   if (!u8g2) return;
   u8g2->clearBuffer();
@@ -551,3 +575,4 @@ void addL(const char* text) {
 double fx(const char* num) {
   return te_interp(num, 0);
 }
+
