@@ -92,6 +92,34 @@ void My_print::oled(const char* s) {
   u8g2->print(s);
 }
 
+void My_print::oled(int num, int t) {
+  if (!u8g2) return;
+  u8g2->setDrawColor(t);
+  u8g2->setCursor(x, y);
+  u8g2->print(num);
+}
+
+void My_print::oled(long num, int t) {
+  if (!u8g2) return;
+  u8g2->setDrawColor(t);
+  u8g2->setCursor(x, y);
+  u8g2->print(num);
+}
+
+void My_print::oled(float num, int t) {
+  if (!u8g2) return;
+  u8g2->setDrawColor(t);
+  u8g2->setCursor(x, y);
+  u8g2->print(num, 2); // ทศนิยม 2 หลัก
+}
+
+void My_print::oled(const char* s, int t) {
+  if (!u8g2) return;
+  u8g2->setDrawColor(t);
+  u8g2->setCursor(x, y);
+  u8g2->print(s);
+}
+
 void My_print::oled(int X, int Y, const char* s) {
   set(X, Y);
   oled(s);
@@ -575,4 +603,5 @@ void addL(const char* text) {
 double fx(const char* num) {
   return te_interp(num, 0);
 }
+
 
