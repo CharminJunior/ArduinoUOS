@@ -57,6 +57,10 @@ public:
   void oled(long num);
   void oled(float num);
   void oled(const char* s);
+  void oled(int num, int t);
+  void oled(long num, int t);
+  void oled(float num, int t);
+  void oled(const char* s, int t);
   void oled(int X, int Y, const char* s);
   void oled(int X, int Y, int num);
   void oled(int X, int Y, long num);
@@ -165,4 +169,5 @@ void addL(const char* text);
 double fx(const char* num);
 
 #endif // ARDUINOOS_H
+
 
